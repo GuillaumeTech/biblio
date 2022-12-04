@@ -1,16 +1,18 @@
-dev:
 
+dev:
+	echo "todo"
 
 build:
-
+	echo "todo"
 
 start:
+	echo "todo"
 
-dev_db:a
-        @echo "Cleaning up..."
+dev-db:
+	docker run --name biblio-db -e POSTGRES_PASSWORD=biblio-dev-pass -e POSTGRES_DB=biblio -d -p 5432:5432 postgres 
 
-migrate_last:a
-        @echo "Cleaning up..."
+migrate-last:
+	poetry run alembic upgrade head
 
-new_migration:a
-        @echo "Cleaning up..."
+new-migration:
+	echo "todo"
