@@ -1,6 +1,6 @@
 
 dev:
-	echo "todo"
+	poetry run uvicorn main:app --reload
 
 setup-dev: dev-db migrate-last dev-db-populate
 
