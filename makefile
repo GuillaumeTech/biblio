@@ -1,6 +1,6 @@
 
 dev:
-	poetry run uvicorn main:app --reload
+	poetry run uvicorn biblio.main:app --reload
 
 setup-dev: dev-db migrate-last dev-db-populate
 

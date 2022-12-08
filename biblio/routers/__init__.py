@@ -1,1 +1,1 @@
-from routers.recipes import router as recipe
+from biblio.routers.recipes import router as recipe

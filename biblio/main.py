@@ -1,6 +1,6 @@
 from fastapi import Depends, FastAPI
 
-from routers import recipe
+from biblio.routers import recipe
 
 app = FastAPI()
 
