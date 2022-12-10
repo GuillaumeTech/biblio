@@ -1,9 +1,11 @@
-from fastapi import Depends, FastAPI
 
+from fastapi import FastAPI
 from biblio.routers import recipe
+from dotenv import load_dotenv
+load_dotenv()
+
 
 app = FastAPI()
-
 
 app.include_router(recipe)
 
