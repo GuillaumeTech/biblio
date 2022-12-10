@@ -1,0 +1,9 @@
+[] use pydantic settings class to load env only once
+[] use Only one connection to the db but multitple session
+[] search by ingredients
+[] paginate search results (use a dependecy)
+[] clean where dependecy are located
+
+
+
+[] token access to rate limit
