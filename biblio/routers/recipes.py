@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 import os
@@ -17,7 +17,10 @@ async def get_session():
     return Session()
 
 
-@router.get("/search/{text}")
-async def read_items(text: str, session=Depends(get_session)):
-    recipes = session.query(Recipe).filter(Recipe.title.contains(text))
+@router.get("/search/")
+async def read_items(term: str = '', session=Depends(get_session)):
+    if not term:
+        raise HTTPException(
+            status_code=422, detail="Can't search for nothing")
+    recipes = session.query(Recipe).filter(Recipe.title.contains(term))
     return [recipe for recipe in recipes]

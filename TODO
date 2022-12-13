@@ -1,3 +1,5 @@
+[x] query parms for search term
+[] define a ranking for results
 [] use pydantic settings class to load env only once
 [] use Only one connection to the db but multitple session
 [] search by ingredients
