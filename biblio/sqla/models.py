@@ -12,3 +12,4 @@ Base = automap_base()
 Base.prepare(autoload_with=engine)
 
 Recipe = Base.classes.recipe
+Ingredient = Base.classes.ingredient
