@@ -6,7 +6,7 @@ from sqlalchemy import func
 from biblio.sqla.models import Ingredient, Recipe
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy import Integer
-from sqlalchemy import or_
+from sqlalchemy import and_
 # import logging
 # logging.basicConfig()
 # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
@@ -43,26 +43,24 @@ async def read_items(terms: str = '', session=Depends(get_session)):
         raise HTTPException(
             status_code=422, detail="Can't search for nothing")
     ingredients = terms.split(',')
-    recipe_id_query = session.query(
-        Ingredient.recipe_id, func.array_agg(Ingredient.name, type_=ARRAY(Integer)).label('ingredients'), func.count(Ingredient.recipe_id).label('count')).group_by(Ingredient.recipe_id)
-    ingredients_filters = []
+
+    filters = []
 
     for ingredient in ingredients:
-        ingredients_filters.append(
+        subquery = session.query(Ingredient.recipe_id).filter(
             Ingredient.name.contains(ingredient))
+        filters.append(Recipe.id.in_(subquery))
 
-    recipe_id_query = recipe_id_query.filter(or_(*ingredients_filters))
-    recipe_id_query = recipe_id_query.having(
-        func.count(Ingredient.recipe_id) == len(ingredients))
+    recipes = (session.query(Recipe.title,
+                             Recipe.link,
+                             Recipe.image,
+                             Recipe.cook_time,
+                             Recipe.prep_time,
+                             Recipe.rest_time,
+                             func.array_agg(Ingredient.name, type_=ARRAY(Integer)).label('ingredients'))
+               .select_from(Recipe, Ingredient)
+               .filter(and_(*filters))
+               .join(Ingredient)
+               .group_by(Recipe))
 
-    result = recipe_id_query.all()
-    print(result)
-
-    return result
-#  CREATE TABLE test (   id INT,
-#   ingredients VARCHAR[] );
-# INSERT INTO test (id, ingredients) VALUES (1, '{"bla", "blo","bli"}');
-# INSERT INTO test (id, ingredients) VALUES (2, '{"bla", "blo","bli"}');
-
-
-# SELECT id FROM (SELECT id, unnest(ingredients) as HUM FROM test) as unnested Where HUM LIKE '%lo%' OR HUM LIKE '%la%' GROUP BY unnested.id
+    return recipes.all()
