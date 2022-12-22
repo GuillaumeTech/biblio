@@ -1,11 +1,13 @@
 [x] query parms for search term
+[x] better schema
+[x] search by ingredients
+[] one command clean and start
+[] paginate search results (use a dependecy)
 [] define a ranking for results
 [] use pydantic settings class to load env only once
 [] use Only one connection to the db but multitple session
-[] search by ingredients
-[] paginate search results (use a dependecy)
 [] clean where dependecy are located
 
 
-
+[] auto sugggest
 [] token access to rate limit
